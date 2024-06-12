@@ -1,0 +1,343 @@
+/* Code for "Smart LED Lightning Manager" by Konrad Ceglarski 2020 */
+
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,400;1,900&display=swap'); */
+
+:root {
+    --bg: #242424;      /* background color */
+    --midtone: #646464;
+    --fg: #ffffff;      /* foreground color */
+    --enable: #ACFF3E;
+    --disable: #FF663E;
+    --text-size: 2rem;
+    --spacing: 2rem;
+    --detail: 10px;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
+}
+
+h1, h2, p, span, td, button {
+    color: var(--fg);
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: var(--text-size);
+}
+
+b {
+    color: var(--fg);
+    font-family: Roboto;
+    font-weight: 900;
+    font-size: var(--text-size);
+}
+
+body {
+    background: var(--bg);
+    overflow-x: hidden;
+    width: 100vw;
+    min-height: 100vh;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 75vw;
+    margin: var(--spacing) auto;
+}
+
+h1 {
+    padding: 0 calc(var(--spacing) / 2);
+    text-align: center;
+}
+
+h1 span {
+    display: block;
+    background: var(--fg);
+    color: var(--bg);
+    padding: 0 calc(var(--spacing) / 2);
+}
+
+#logo {
+    width: calc(var(--spacing) * 3);
+    height: calc(var(--spacing) * 3);
+    margin-bottom: var(--spacing);
+}
+
+section {
+    width: 75vw;
+    margin: var(--spacing) auto;
+}
+
+.section-title {
+    display: inline-block;
+    background: var(--fg);
+    color: var(--bg);
+    padding: 0 calc(var(--spacing) / 2);
+    margin-bottom: var(--spacing);
+
+    transition: .4s ease-in-out;
+    -webkit-transition: .4s ease-in-out;
+}
+
+.section-content {
+    margin: 0 var(--spacing);
+}
+
+.argument {
+    display: flex;
+    align-items: center;
+}
+
+.argument:not(:last-of-type) {
+    margin-bottom: var(--spacing);
+}
+
+.argument p {
+    margin-left: var(--spacing);
+    text-transform: uppercase;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 75vw;
+    margin: var(--spacing) auto;
+}
+
+footer table {
+    width: 100%;
+}
+
+footer table tr td {
+    width: 50%;
+}
+
+footer table tr td:first-of-type {
+    text-align: right;
+    padding-right: calc(var(--spacing) / 2);
+}
+
+footer table tr td:last-of-type {
+    text-align: left;
+    padding-left: calc(var(--spacing) / 2);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: calc(5vw + var(--detail));
+    height: calc(var(--spacing) * 1.5 + var(--detail));
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--fg);
+    border-radius: calc(var(--spacing) * 1.5);
+}
+
+.switch .slider:before {
+    position: absolute;
+    content: "";
+    width: calc(var(--spacing) * 1.5);
+    height: calc(var(--spacing) * 1.5);
+    top: calc(var(--detail) / 2);
+    left: calc(var(--detail) / 2);
+    background-color: var(--bg);
+    border-radius: calc(var(--spacing) * 1.5);
+    transition: .4s ease-in-out;
+    -webkit-transition: .4s ease-in-out;;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(calc(5vw - 100%));
+    -moz-transform: translateX(calc(5vw - 100%));
+    -webkit-transform: translateX(calc(5vw - 100%));
+}
+
+.mode .name {
+    display: inline-block;
+    cursor: pointer;
+    text-transform: uppercase;
+    height: calc(var(--spacing) * 1.5 + var(--detail));
+    line-height: calc(var(--spacing) * 1.5 + var(--detail));
+    padding: 0 calc(var(--spacing) * 0.75);
+    background-color: var(--bg);
+    border: calc(var(--detail) / 2) solid var(--fg);
+    border-radius: var(--spacing);
+    margin-right: var(--spacing);
+    margin-bottom: var(--spacing);
+    transition: .4s ease-in-out;
+    -webkit-transition: .4s ease-in-out;
+}
+
+.mode input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.mode input:checked + .name {
+    background-color: var(--fg);
+    color: var(--bg);
+}
+
+.mode:focus {
+    outline: none;
+}
+
+.slider-argument {
+    width: 100%;
+    margin-bottom: var(--spacing);
+}
+
+.slider-argument p, .slider-argument span {
+    text-transform: uppercase;
+
+    transition: .4s ease-in-out;
+    -webkit-transition: .4s ease-in-out;
+}
+
+.slider-argument td:first-of-type {
+    width: 25%;
+    text-align: right;
+    padding-right: var(--spacing);
+}
+
+.slider-argument td:last-of-type {
+    width: 25%;
+    text-align: left;
+    padding-left: var(--spacing);
+}
+
+.range-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    padding: 0 calc(var(--detail) / 2);
+    height: calc(var(--spacing) * 1.5 + var(--detail));
+    border-radius: calc(var(--spacing) * 1.5);
+    background: var(--fg);
+    outline: none;
+}
+
+.range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    cursor: pointer;
+    width: calc(var(--spacing) * 1.5);
+    height: calc(var(--spacing) * 1.5);
+    top: calc(var(--detail) / 2);
+    left: calc(var(--detail) / 2);
+    background-color: var(--bg);
+    border-radius: calc(var(--spacing) * 1.5);
+
+    /* background-color: none;
+    border: 5px solid var(--bg); */
+}
+
+.range-slider::-moz-slider-thumb {
+    cursor: pointer;
+    width: calc(var(--spacing) * 1.5);
+    height: calc(var(--spacing) * 1.5);
+    top: calc(var(--detail) / 2);
+    left: calc(var(--detail) / 2);
+    background-color: var(--bg);
+    border-radius: calc(var(--spacing) * 1.5);
+}
+
+::-webkit-scrollbar {
+    width: 30px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--fg);
+    border: 10px solid var(--bg);
+    border-radius: 30px;
+}
+
+.disabled .section-title {
+    background-color: var(--midtone);
+}
+
+.disabled .mode .name {
+    border-color: var(--midtone);
+    color: var(--midtone);
+}
+
+.disabled .mode input:checked + .name {
+    background-color: var(--midtone);
+}
+
+.disabled p, .disabled span {
+    color: var(--midtone);
+}
+
+/* details */
+
+#arduino, #angular {
+    height: calc(var(--spacing) * 4);
+}
+
+#status-light, #hue-value, #output {
+    flex: 0 0 auto;
+    display: inline-block;
+    width: calc(var(--spacing) * 1.5);
+    height: calc(var(--spacing) * 1.5);
+    background-color: var(--enable);
+    border-radius: 50%;
+}
+
+#mode {
+    margin-bottom: 0;
+}
+
+#options {
+    margin-top: 0;
+}
+
+#output-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#output-container p {
+    text-transform: uppercase;
+    margin-bottom: var(--spacing);
+
+    transition: .4s ease-in-out;
+    -webkit-transition: .4s ease-in-out;
+}
+
+#hue-value {
+    transition: none;
+    -webkit-transition: none;
+}
+
+/* #output:before {
+    content: "";
+    position: absolute;
+    display: inline-block;
+    flex: 0 0 auto;
+    display: inline-block;
+    width: calc(var(--spacing) * 1.75);
+    height: calc(var(--spacing) * 1.75);
+    border: 5px solid var(--fg);
+    border-radius: 50%;
+    transform: translate(-13.25%, -13.25%);
+} */

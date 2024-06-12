@@ -1,0 +1,90 @@
+<!-- Code for "Smart LED Lightning Manager" by Konrad Ceglarski 2020 -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="src/angular.min.js"></script> <!--https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js-->
+
+        <title>Lightning Settings</title>
+
+        <link rel="icon" href="src/icon.ico">
+        <link rel="stylesheet" href="fonts.css">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="responsive.css">
+        <script src="app.js" ></script>
+    </head>
+    <body ng-app="app" ng-controller="controller" ng-init="load()">
+        <header>
+            <img id="logo" src="src/logo/logo-white.png">
+            <h1>LIGHTNING<span>SETTINGS</span></h1>
+        </header>
+        <section id="status">
+            <h2 class="section-title">STATUS</h2>
+            <div class="section-content">
+                <div id="connection" class="argument">
+                    <span id="status-light" ng-style="statuslight"></span> <p ng-if="data.status">ON</p><p ng-if="!data.status">OFF</p>
+                </div>
+                <div id="connection" class="argument">
+                    <label class="switch">
+                        <input type="checkbox" id="status-switch" ng-model="onoffswitch" ng-change="statusSwitch();">
+                        <span class="slider"></span>
+                    </label>
+                    <p>ON / OFF</p>
+                </div>
+            </div>
+        </section>
+        <section id="mode" ng-class="{disabled: !data.status}">
+            <h2 class="section-title">MODE</h2>
+            <div class="section-content">
+                <form id="mode-selection">
+                    <label class="mode" ng-repeat="mode in data.modes">
+                        <input type="radio" name="mode-selection" value="{{data.modes.indexOf(mode)}}" ng-checked="data.modes.indexOf(mode) == data.mode" ng-model="modebutton" ng-change="changeMode();">
+                        <span class="name">{{mode}}</span>
+                    </label>
+                </form>
+            </div>
+        </section>
+        <section id="options" ng-class="{disabled: !data.status}">
+            <h2 class="section-title">OPTIONS</h2>
+            <div class="section-content">
+                <table id="hue-container" class="slider-argument" ng-model="huecontainer" ng-if="data.options[0]">
+                    <tr>
+                    <td><p>Hue</p></td>
+                    <td><input type="range" min="0" max="360" value="180" id="hue" class="range-slider" style="background: linear-gradient(to right, hsl(0,100%,50%), hsl(60,100%,50%), hsl(120,100%,50%), hsl(180,100%,50%), hsl(240,100%,50%), hsl(300,100%,50%), hsl(360,100%,50%));" ng-model="$parent.hue" ng-change="hueSlider();"></td>
+                    <td><span id="hue-value" ng-style="hueindicator"></span></td>
+                    </tr>
+                </table>
+                <table id="sat-container" class="slider-argument" ng-model="satcontainer" ng-if="data.options[1]">
+                    <tr>
+                    <td><p>Saturation</p></td>
+                    <td><input type="range" min="0" max="100" value="50" id="sat" class="range-slider" ng-model="$parent.sat" ng-change="satSlider();" ng-style="satstyle"></td>
+                    <td><span id="sat-value" ng-model="satindicator">{{sat}} %</span></td>
+                    </tr>
+                </table>
+                <table id="bright-container" class="slider-argument" ng-model="brightcontainer" ng-if="data.options[2]">
+                    <tr>
+                    <td><p>Lightness</p></td>
+                    <td><input type="range" min="0" max="100" value="50" id="bright" class="range-slider" ng-model="$parent.bright" ng-change="brightSlider();" ng-style="brightstyle"></td>
+                    <td><span id="bright-value" ng-model="brightindicator">{{bright}} %</span></td>
+                    </tr>
+                </table>
+                <div id="output-container">
+                    <p>Output</p>
+                    <span id="output" ng-style="outputindicator"></span>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <h1>MADE WITH</h1>
+            <img src="src/logo/arduino-logo-white.png" id="arduino">
+            <img src="src/logo/angular-logo-white.png" id="angular">
+            <h1>© 2020</h1>
+            <table>
+                <tr><td>KONRAD CEGLARSKI</td><td><b>SOFTWARE</b></td></tr>
+                <tr><td>MATEUSZ KĘDZIERSKI</td><td><b>HARDWARE</b></td></tr>
+            </table>
+        </footer>
+    </body>
+</html>
